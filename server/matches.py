@@ -1,25 +1,28 @@
 class Match:
     def __init__(self, id, winner=None, submatches=None):
-        # This is the leaves from learning example
-        self.submatches = submatches
-        # This is the node from the learning example
-        self.winner = winner
+
         self.id = id 
+        self.winner = winner
+        self.submatches = submatches
 
-
+    ######################################
+    # Functions for assigning submatches #
+    #     from the parent submatches     #
+    ######################################
     def left(self):
         return self.submatches[0] if self.submatches is not None else None
-
+    def right(self):
+            return self.submatches[1] if self.submatches is not None else None
+    
+    #########################################################
+    # Functions for setting the winner of the current Match #
+    #########################################################
     def left_wins(self):
         self.winner = self.submatches[0].winner if self.submatches and self.submatches[0] is not None else None
-
-    def right(self):
-        return self.submatches[1] if self.submatches is not None else None
-
     def right_wins(self):
         self.winner = self.submatches[1].winner if self.submatches and self.submatches[1] is not None else None
 
-
+# This function is for generating the Bracket structure
 def generate_bracket(teams):
     """
     This generates the Matches with id's of "1-16" using the "range(len(teams)" which translates to [1,2,...15,16]
@@ -29,10 +32,13 @@ def generate_bracket(teams):
     """
     list_of_matches = [Match(x + 1 ,team) for (x, team) in zip(range(len(teams)), teams)]
 
+
+
     def recurse(list_of_matches, id_offset):
         if len(list_of_matches) == 1:
             return list_of_matches[0]
 
+        
         competing_pairs, z = [], int(len(list_of_matches) // 2)
 
         for id in range(z):
