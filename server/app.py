@@ -19,6 +19,7 @@ def index():
 def get_teams():
     teams = Team.query.all()
     data = [team.to_dict() for team in teams]
+
     return make_response(data)
 
 
@@ -27,14 +28,6 @@ def get_pairs():
     teams = Team.query.all()
     list_of_teams = [team.to_dict() for team in teams]
     random.shuffle(list_of_teams)
-    # z = int(len(list_of_teams) / 2)
-    # pairs = []
-    # x, y = 0, 1
-    # for _ in range(z):
-        
-    #     pairs.append([list_of_teams[x]["name"], list_of_teams[y]["name"]])
-    #     x += 2
-    #     y += 2
 
     competing_pairs, z = [], int(len(list_of_teams) // 2)
     for _ in range(z):
