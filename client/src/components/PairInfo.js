@@ -4,12 +4,12 @@ import uuid from 'react-uuid'
 
 
 
-export default function PairInfo({ team }) {
-    
+export default function PairInfo({ pair }) {
+    // console.log(pair)
     return (
         <ul>
-            <TeamInfo key={uuid()} team={team[0]}/>
-            <TeamInfo key={uuid()} team={team[1]}/>
+            <TeamInfo key={uuid()} team={pair[0]}/>
+            <TeamInfo key={uuid()} team={pair[1]}/>
         </ul>
     )
 }
