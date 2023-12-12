@@ -1,3 +1,6 @@
+import functools
+import random
+
 class Match:
     def __init__(self, id, winner=None, submatches=None):
 
@@ -22,6 +25,15 @@ class Match:
     def right_wins(self):
         self.winner = self.submatches[1].winner if self.submatches and self.submatches[1] is not None else None
 
+
+def build_match(id, winner=None, submatches=None):
+    return {
+        "id": id,
+        "winner": winner if winner is not None else "",
+        "submatches": submatches if submatches is not None else []
+    }
+
+
 # This function is for generating the Bracket structure
 def generate_bracket(teams):
     """
@@ -30,20 +42,20 @@ def generate_bracket(teams):
     To use these tuples effectively they need to be desconstructed which is done with the (x, team) 
     This allows the instant of Match to be created with the incrementing (x+1) id along with the name to create 16 unique instances of Match()
     """
-    list_of_matches = [Match(x + 1 ,team) for (x, team) in zip(range(len(teams)), teams)]
+    list_of_matches = [build_match(x + 1 ,team) for (x, team) in zip(range(len(teams)), teams)]
+    random.shuffle(list_of_matches)
 
-
-
+    # Below is the function for taking in the list of matches, creates pairs and passes them
+    # into a parent Match until there is only one parent Match
     def recurse(list_of_matches, id_offset):
         if len(list_of_matches) == 1:
             return list_of_matches[0]
 
-        
         competing_pairs, z = [], int(len(list_of_matches) // 2)
 
         for id in range(z):
             team_left, team_right = list_of_matches.pop(0), list_of_matches.pop(0)
-            competing_pairs.append(Match(id + id_offset, None, (team_left, team_right)))
+            competing_pairs.append(build_match(id + id_offset, None, (team_left, team_right)))
 
         return recurse(competing_pairs, z + id_offset)
 
@@ -61,3 +73,16 @@ def bracket_to_dict(match):
             "submatches": [match for match in [bracket_to_dict(match.left()), bracket_to_dict(match.right())] if match is not None]
             
         }
+
+# The function below is used to grab an individual Match by its "id"
+def match_finder(match, fn):
+    match_list = [match]
+
+    while len(match_list) != 0:
+        found = list(filter(fn, match_list))
+        if len(found ) > 0:
+            return found[0]
+        else:
+            match_list = functools.reduce(lambda x, y: x + y, map(lambda x: x["submatches"], match_list))
+
+    return None
