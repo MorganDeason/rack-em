@@ -16,35 +16,13 @@ db.init_app(app)
 def index():
     return {"msg": "Hello World!"}
 
-
+# Get all Teams
 @app.get("/api/teams")
 def get_teams():
-    teams = Team.query.all()
-    data = [team.to_dict() for team in teams]
+    teams = [team.to_dict() for team in Team.query.all()]
+    return make_response(teams)
 
-    return make_response(data)
-
-
-@app.get("/api/teams/pairs")
-def get_pairs():
-    teams = Team.query.all()
-    list_of_teams = [team.to_dict() for team in teams]
-    random.shuffle(list_of_teams)
-
-    competing_pairs, z = [], int(len(list_of_teams) // 2)
-    for _ in range(z):
-        first_competitor, second_competitor = list_of_teams.pop(0), list_of_teams.pop(0)
-        # print(f"{first_competitor['name']} <> {second_competitor['name']}")
-        competing_pairs.append([first_competitor["name"], second_competitor["name"]])
-
-    if len(list_of_teams) == 1:
-        lone_competitor = list_of_teams.pop(0)
-        competing_pairs.append([lone_competitor["name"],"You advance to the next round!"])
-        # print(f"{lone_competitor['name']} automatically advances to the next round!")
-
-    return make_response(competing_pairs)
-
-
+# Add new team to the database
 @app.post("/api/teams")
 def add_team():
     POST_REQ = request.get_json()
@@ -55,21 +33,29 @@ def add_team():
     db.session.commit()
     return make_response(jsonify(new_team.to_dict()))
 
-@app.get("/api/bracket")
+# Gets all brackets
+# NOTE: "Json.loads" convers a string to a dictionary
+@app.get("/api/brackets/all")
 def get_bracket():
-    bracket = json.loads(Bracket.query.get(1).matches)
-    
+    bracket = [{"id": bracket.id, "matches": json.loads(bracket.matches)} for bracket in Bracket.query.all()]
+    return make_response(bracket)
 
-    return [bracket]
+# Get Bracket by id
+@app.get('/api/brackets')
+def get_bracket_by_id():
+    bracket_id = request.args.get('bracket_id', type=int)
+    bracket = Bracket.query.get(bracket_id)
+    return make_response({"id": bracket.id, "matches": json.loads(bracket.matches)})
 
-@app.post("/random")
+@app.post("/api/brackets")
 def blank_bracket():
     new_bracket = Bracket(matches="{}")
     db.session.add(new_bracket)
     db.session.commit()
     return jsonify(new_bracket.to_dict())
     
-
+# This associates a team with a bracket
+# NOT BEING USED YET ##########################################
 @app.put("/maybe")
 def add_team_to_bracket():
     payload = request.get_json()
@@ -86,7 +72,7 @@ def add_team_to_bracket():
 
     return make_response("Hello") 
 
-@app.post('/learning')
+@app.post('/api/brackets/generate')
 def generate_matches():
     bracket_id = request.args.get('bracket_id', type=int)
     if bracket_id is None:
@@ -98,10 +84,7 @@ def generate_matches():
     bracket.matches = json.dumps(matches)
     db.session.commit()
 
-    
-
-
-    return make_response(jsonify(matches))
+    return make_response(jsonify(bracket.to_dict()))
 
 
 
@@ -111,7 +94,7 @@ def generate_matches():
 def mod_bracket():
     payload = request.get_json()
     print(f"1>>>>>>>>{payload}")
-    bracket = Bracket.query.get(1)
+    bracket = Bracket.query.get(payload["bracketId"])
     print(f"2>>>>>>{bracket}")
     new_bracket = match_finder(payload, json.loads(bracket.matches))
     print(f"3>>>>{new_bracket}")
@@ -126,7 +109,7 @@ def mod_bracket():
     # db.session.add(bracket)
     db.session.commit()
     
-    return make_response([new_bracket])
+    return make_response(new_bracket)
 
 
 

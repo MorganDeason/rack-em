@@ -85,6 +85,7 @@ def match_finder(payload, bracket):
             #       the PATCH code actually happens here. However, in order to 
             #       fully handle the rewrite, this function will need access to
             #       the `bracket` object and return it.
+
             maybe = list(filter(lambda x : x["id"] == payload["submatchId"], found[0]["submatches"]))
             found[0]["winner"] = maybe[0]["winner"]
             
