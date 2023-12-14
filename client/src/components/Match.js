@@ -4,21 +4,11 @@ import { useState } from 'react'
 
 
 
-export default function Match({ match, setMatches }) {
+export default function Match({ bracketId, match, setMatch}) {
 
-    const [currentWinnerInfo, setCurrentWinnerInfo] = useState({
-        "matchId": '',
-        "submatchId": ''
-    })
 
     const handleChange = (match, currentSubmatch) => {
-        setCurrentWinnerInfo({ "matchId": match.id, "submatchId": match.submatches[currentSubmatch].id });
-        // console.log(match)
-        setMatchWinner(currentWinnerInfo)
-        // setCurrentWinnerInfo({
-        //     "matchId": '',
-        //     "submatchId": ''
-        // })
+        setMatchWinner({ "matchId": match.id, "submatchId": match.submatches[currentSubmatch].id, "bracketId": bracketId });
     }
 
     const setMatchWinner = (currentWinnerInfo) => {
@@ -31,20 +21,8 @@ export default function Match({ match, setMatches }) {
             body: JSON.stringify(currentWinnerInfo)
         })
             .then(res => res.json())
-
-            .then(data => setMatches(data))
-            // .then(data => console.log(data))
-
-        
+            .then(data => setMatch(data))
     }
-
-
-
-
-
-
-
-
 
     return (
         <div className="flex items-center justify-center">
@@ -52,9 +30,9 @@ export default function Match({ match, setMatches }) {
                 <div className="bg-gray-200 w-25 h-25 flex items-center justify-center border border-gray-400 rounded-md">
                     {match.winner}
                 </div>
-                {match.submatches.length > 0 && (
+                {match.submatches && match.submatches.length > 0 && (
                     <div className="flex mt-2 space-x-4">
-                        <Match key={match.submatches[0].id} match={match.submatches[0]} setMatches={setMatches} />
+                        <Match key={match.submatches[0].id} match={match.submatches[0]} setMatch={setMatch} bracketId={bracketId}/>
                         <button
                             onClick={() => handleChange(match, 0)}
                             className="bg-blue-500 text-white px-4 py-2 rounded-md">
@@ -62,9 +40,9 @@ export default function Match({ match, setMatches }) {
                         </button>
                     </div>
                 )}
-                {match.submatches.length > 0 && (
+                {match.submatches && match.submatches.length > 0 && (
                     <div className="flex mt-2 space-x-4">
-                        <Match key={match.submatches[1].id} match={match.submatches[1]} setMatches={setMatches} />
+                        <Match key={match.submatches[1].id} match={match.submatches[1]} setMatch={setMatch} bracketId={bracketId}/>
                         <button
                             onClick={() => handleChange(match, 1)}
                             className="bg-blue-500 text-white px-4 py-2 rounded-md">
