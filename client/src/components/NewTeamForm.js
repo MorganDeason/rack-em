@@ -30,7 +30,7 @@ export default function NewTeamForm({ handleAddTeam }) {
         <div>
             <h1>Add a Team!</h1>
             <form onSubmit={handleSubmit}>
-                <label>Name:</label>
+                <label>Name: </label>
                 <input
                     name="name"
                     onChange={handleChange}

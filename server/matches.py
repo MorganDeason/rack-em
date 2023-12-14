@@ -75,13 +75,20 @@ def bracket_to_dict(match):
         }
 
 # The function below is used to grab an individual Match by its "id"
-def match_finder(match, fn):
-    match_list = [match]
+def match_finder(payload, bracket):
+    match_list = [bracket]
 
     while len(match_list) != 0:
-        found = list(filter(fn, match_list))
-        if len(found ) > 0:
-            return found[0]
+        found = list(filter(lambda x : x["id"] == payload["matchId"], match_list))   
+        if found:
+            # NOTE: The first way to scale this is to rewrite this function so
+            #       the PATCH code actually happens here. However, in order to 
+            #       fully handle the rewrite, this function will need access to
+            #       the `bracket` object and return it.
+            maybe = list(filter(lambda x : x["id"] == payload["submatchId"], found[0]["submatches"]))
+            found[0]["winner"] = maybe[0]["winner"]
+            
+            return bracket
         else:
             match_list = functools.reduce(lambda x, y: x + y, map(lambda x: x["submatches"], match_list))
 
