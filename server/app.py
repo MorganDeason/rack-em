@@ -17,12 +17,22 @@ def index():
     return {"msg": "Hello World!"}
 
 # Get all Teams
+'''
+{
+    "associator": [],
+    "id": int,
+    "name": ""
+}
+'''
 @app.get("/api/teams")
 def get_teams():
     teams = [team.to_dict() for team in Team.query.all()]
     return make_response(teams)
 
 # Add new team to the database
+'''
+POST_REQ = {"name": ""}
+'''
 @app.post("/api/teams")
 def add_team():
     POST_REQ = request.get_json()
@@ -34,13 +44,22 @@ def add_team():
     return make_response(jsonify(new_team.to_dict()))
 
 # Gets all brackets
-# NOTE: "Json.loads" convers a string to a dictionary
+'''
+{
+"id": int,
+"matches": {}
+}
+'''
+# NOTE: "Json.loads" converts a string to a dictionary
 @app.get("/api/brackets/all")
 def get_bracket():
     bracket = [{"id": bracket.id, "matches": json.loads(bracket.matches)} for bracket in Bracket.query.all()]
     return make_response(bracket)
 
 # Get Bracket by id
+'''
+url looks like "..../brackets?bracket_id="
+'''
 @app.get('/api/brackets')
 def get_bracket_by_id():
     bracket_id = request.args.get('bracket_id', type=int)
@@ -65,13 +84,15 @@ def add_team_to_bracket():
         TeamBracketAssociator.team_id == payload['team_id'], 
         TeamBracketAssociator.bracket_id == payload['bracket_id']
         )
-    
+    # A check to make sure that team is not already associated with the bracket before adding
     if found is None:
         db.session.add(team_bracket_associator)
         db.session.commit()
 
     return make_response("Hello") 
 
+# This should populate the current bracket with the available teams.....MAYBE ########################################
+# Also not being used yet...############################
 @app.post('/api/brackets/generate')
 def generate_matches():
     bracket_id = request.args.get('bracket_id', type=int)
@@ -89,37 +110,26 @@ def generate_matches():
 
 
 
-
+    # This sets the winner of the match within the bracket
 @app.patch("/api/bracket")
 def mod_bracket():
     payload = request.get_json()
-    print(f"1>>>>>>>>{payload}")
+    # print(f"1>>>>>>>>{payload}")
     bracket = Bracket.query.get(payload["bracketId"])
-    print(f"2>>>>>>{bracket}")
+    # print(f"2>>>>>>{bracket}")
     new_bracket = match_finder(payload, json.loads(bracket.matches))
-    print(f"3>>>>{new_bracket}")
+    # print(f"3>>>>{new_bracket}")
 
-    # NOTE: The other way to do this is use the ID that we used previously to grab
-    #       the current match from `match_finder()` and use that to set the bracket's
-    #       current match equal to the newly edited current match.
+
     if new_bracket is None:
         raise ValueError("Parameters can not be empty or were not found.")
     bracket.matches = json.dumps(new_bracket)
     
-    # db.session.add(bracket)
     db.session.commit()
     
     return make_response(new_bracket)
 
 
-
-
-
-
-
-
-
-    
 
 
 if __name__ == "__main__":

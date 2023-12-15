@@ -23,12 +23,7 @@ export default function Tournament() {
 
     return (
         <div>
-
-            <div className="text-blue-600">
-                <h3>Hopefully a tournament soon</h3>
-            </div>
             <Match key={bracket.id} match={bracket} setMatch={setBracket} bracketId={bracketId}/>
-
         </div>
 
     )

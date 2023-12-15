@@ -29,9 +29,8 @@ export default function NewTeamForm({ handleAddTeam }) {
 
     return (
         <div className="flex flex-wrap max-w-full flex-col space-y-3 items-center">
-            <h1>Add a Team!</h1>
             <form className='flex flex-row space-x-3'>
-                <label className='text-3xl'>Name: </label>
+                <label className='text-3xl'>Add a Team: </label>
                 <input
                 className='form-input rounded-full'
                     name="name"
