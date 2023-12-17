@@ -23,6 +23,7 @@ export default function Tournament() {
 
     return (
         <div>
+            <h1>{bracket.winner}</h1>
             <Match key={bracket.id} match={bracket} setMatch={setBracket} bracketId={bracketId}/>
         </div>
 

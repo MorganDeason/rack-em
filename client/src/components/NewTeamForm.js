@@ -38,7 +38,7 @@ export default function NewTeamForm({ handleAddTeam }) {
                     placeholder='Please enter a name'
                     value={formData.name}
                 />
-                <button onClick={handleSubmit} className="bg-blue-500 rounded-full text-white py-2 px-4 font-bold text-xl hover:bg-blue-700"type='submit'>Submit</button>
+                <button onClick={handleSubmit} className="bg-blue-500 rounded-full text-white py-2 px-4 font-bold text-xl hover:bg-blue-700" type='submit'>Submit</button>
             </form>
         </div>
     )

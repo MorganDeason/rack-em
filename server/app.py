@@ -43,6 +43,18 @@ def add_team():
     db.session.commit()
     return make_response(jsonify(new_team.to_dict()))
 
+# Delete a team from the database
+@app.delete("/api/teams")
+def delete_team():
+    team_id = request.args.get('team_id', type=int)
+    matching_team = Team.query.filter(Team.id == team_id).first()
+    
+    if not matching_team:
+        return make_response(jsonify({"error": "Team not found"}), 404)
+    db.session.delete(matching_team)
+    db.session.commit()
+    return make_response(jsonify(matching_team.to_dict()),200)
+
 # Gets all brackets
 '''
 {
@@ -72,6 +84,21 @@ def blank_bracket():
     db.session.add(new_bracket)
     db.session.commit()
     return jsonify(new_bracket.to_dict())
+
+@app.delete("/api/brackets")
+def remove_bracket():
+    bracket_id = request.args.get('bracket_id', type=int)
+    matching_bracket = Bracket.query.filter(Bracket.id == bracket_id).first()
+
+    if not matching_bracket:
+        return make_response(jsonify({"error": "Bracket not found"}), 404)
+    db.session.delete(matching_bracket)
+    db.session.commit()
+    return make_response(jsonify(matching_bracket.to_dict()), 200)
+
+
+
+
     
 # This associates a team with a bracket
 # NOT BEING USED YET ##########################################
@@ -100,17 +127,13 @@ def generate_matches():
         raise ValueError("Please provide bracket id.")
     
     teams = [team.to_dict()["name"] for team in Team.query.all()]
-    matches = generate_bracket(teams)
+    # matches = generate_bracket(teams)
     bracket = Bracket.query.get(bracket_id)
-    bracket.matches = json.dumps(matches)
+    bracket.matches = json.dumps({})
     db.session.commit()
-
     return make_response(jsonify(bracket.to_dict()))
 
-
-
-
-    # This sets the winner of the match within the bracket
+# This sets the winner of the match within the bracket
 @app.patch("/api/bracket")
 def mod_bracket():
     payload = request.get_json()
