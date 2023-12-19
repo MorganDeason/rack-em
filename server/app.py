@@ -55,6 +55,17 @@ def delete_team():
     db.session.commit()
     return make_response(jsonify(matching_team.to_dict()),200)
 
+# Get teams by BRACKET_ID
+@app.get("/api/teamsbyid")
+def get_teams_by_bracket_id():
+    bracket_id = request.args.get('bracket_id', type=int)
+    currentTeams = [team.to_dict(only=("id", "name")) for team in Team.query.join(TeamBracketAssociator).join(Bracket).filter((TeamBracketAssociator.bracket_id == bracket_id)).all()]
+    return make_response(jsonify(currentTeams))
+
+
+
+
+
 # Gets all brackets
 '''
 {
@@ -99,39 +110,48 @@ def remove_bracket():
 
 
 
-    
+
 # This associates a team with a bracket
 # NOT BEING USED YET ##########################################
-@app.put("/maybe")
+@app.post("/api/brackets/associate")
 def add_team_to_bracket():
+    bracket_id = request.args.get('bracket_id',type=int)
+    # This payload is an array of the ids of the selected teams from the frontend
     payload = request.get_json()
-    team_bracket_associator = TeamBracketAssociator(team_id=payload['team_id'], bracket_id=payload['bracket_id'])
-    
-    found = TeamBracketAssociator.query.filter(
-        TeamBracketAssociator.team_id == payload['team_id'], 
-        TeamBracketAssociator.bracket_id == payload['bracket_id']
-        )
+    for p in payload :
+        team_bracket_associator = TeamBracketAssociator(team_id=p, bracket_id=bracket_id)
+        
+        found = TeamBracketAssociator.query.filter(
+            TeamBracketAssociator.team_id == p, 
+            TeamBracketAssociator.bracket_id == bracket_id
+            ).first()
+        
     # A check to make sure that team is not already associated with the bracket before adding
-    if found is None:
-        db.session.add(team_bracket_associator)
-        db.session.commit()
-
+        if found is None:
+            db.session.add(team_bracket_associator)
+            
+    db.session.commit()
     return make_response("Hello") 
 
 # This should populate the current bracket with the available teams.....MAYBE ########################################
 # Also not being used yet...############################
+# TODO: Change this to populate bracket instead of generate as that more accurately describes what is going on
 @app.post('/api/brackets/generate')
 def generate_matches():
     bracket_id = request.args.get('bracket_id', type=int)
     if bracket_id is None:
         raise ValueError("Please provide bracket id.")
     
-    teams = [team.to_dict()["name"] for team in Team.query.all()]
-    # matches = generate_bracket(teams)
+    teams = [team.to_dict()["name"] for team in Team.query.join(TeamBracketAssociator).join(Bracket).filter((TeamBracketAssociator.bracket_id == bracket_id)).all()]
+    print(teams)
     bracket = Bracket.query.get(bracket_id)
-    bracket.matches = json.dumps({})
-    db.session.commit()
-    return make_response(jsonify(bracket.to_dict()))
+    if len(teams) != 0: 
+        matches = generate_bracket(teams)
+        
+        bracket.matches = json.dumps(matches)
+
+        db.session.commit()
+    return make_response(jsonify(bracket.to_dict(only=("id", "matches"))))
 
 # This sets the winner of the match within the bracket
 @app.patch("/api/bracket")
@@ -143,14 +163,13 @@ def mod_bracket():
     new_bracket = match_finder(payload, json.loads(bracket.matches))
     # print(f"3>>>>{new_bracket}")
 
-
     if new_bracket is None:
         raise ValueError("Parameters can not be empty or were not found.")
     bracket.matches = json.dumps(new_bracket)
     
     db.session.commit()
     
-    return make_response(new_bracket)
+    return make_response(bracket.to_dict(only=("id", "matches")))
 
 
 

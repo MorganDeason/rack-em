@@ -14,12 +14,11 @@ export default function NewTeamForm({ handleAddTeam }) {
     }
 
     const handleSubmit = (e) => {
-        console.log("Hello world")
         e.preventDefault()
         const newTeam = {
             name: formData.name,
         }
-        if (formData.name !== ""){
+        if (formData.name !== "") {
             handleAddTeam(newTeam)
         }
         setFormData({
@@ -32,7 +31,7 @@ export default function NewTeamForm({ handleAddTeam }) {
             <form className='flex flex-row space-x-3'>
                 <label className='text-3xl'>Add a Team: </label>
                 <input
-                className='form-input rounded-full'
+                    className='form-input rounded-full'
                     name="name"
                     onChange={handleChange}
                     placeholder='Please enter a name'
