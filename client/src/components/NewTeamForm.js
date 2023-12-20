@@ -1,8 +1,5 @@
 import React, { useState } from 'react'
 
-
-
-
 export default function NewTeamForm({ handleAddTeam }) {
 
     const [formData, setFormData] = useState({
@@ -27,17 +24,16 @@ export default function NewTeamForm({ handleAddTeam }) {
     }
 
     return (
-        <div className="flex flex-wrap max-w-full flex-col space-y-3 items-center">
-            <form className='flex flex-row space-x-3'>
-                <label className='text-3xl'>Add a Team: </label>
+        <div className="flex flex-wrap max-w-full flex-col items-center">
+            <form className='flex flex-row space-x-3 items-center'>
                 <input
-                    className='form-input rounded-full'
+                    className='form-input rounded-full py-2'
                     name="name"
                     onChange={handleChange}
                     placeholder='Please enter a name'
                     value={formData.name}
                 />
-                <button onClick={handleSubmit} className="bg-blue-500 rounded-full text-white py-2 px-4 font-bold text-xl hover:bg-blue-700" type='submit'>Submit</button>
+                <button onClick={handleSubmit} className="bg-blue-500 rounded-full text-white py-2 px-4 font-bold text-xl hover:bg-blue-700" type='submit'>Add Team</button>
             </form>
         </div>
     )

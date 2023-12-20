@@ -69,5 +69,4 @@ export async function generateMatches(bracketId) {
         method: "POST",
     })
     return await res2.json()
-
 }

@@ -23,13 +23,13 @@ export default function TeamList({teams, setTeams}) {
     const color = deleteMode ? "bg-red-600 hover:bg-red-700" : "bg-gray-700 hover:bg-gray-800"
 
     return (
-        <div>
-            <h1 className='font-bold text-5xl text-center py-8'>Available teams...</h1>
-            <div className="flex flex-wrap flex-col h-96 items-center gap-y-2">
+        <div className="flex flex-col space-y-5 items-center">
+            <h1 className='font-bold text-5xl text-center py-8'>Available teams</h1>
+            <div className="flex flex-wrap flex-col h-96 items-center gap-2">
                 {teams.map(team => <div className=" team" onClick={handleTeamClick(team.id)} key={team.id}>{team.name}</div>)}
             </div>
-            <div>
-                <NewTeamForm handleAddTeam={handleAddTeam} />
+            <div >
+                <NewTeamForm className='space-y-3' handleAddTeam={handleAddTeam} />
             </div>
             <div className='flex items-center justify-center py-1'>
                 <button className={`flex ${color} rounded-full text-white px-2 font-bold text-lg`} onClick={() => setDeleteMode(!deleteMode)}>Remove Teams</button>

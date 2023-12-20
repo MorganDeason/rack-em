@@ -1,5 +1,4 @@
 import React from 'react'
-import { useState } from 'react'
 import { updateMatchWinner } from '../apiUtils'
 
 
@@ -18,7 +17,7 @@ export default function Match({ bracketId, match, setMatch }) {
         <div className="flex flex-col items-center">
             {match.submatches && match.submatches.length > 0 && (
                 <>
-                    <div className="flex items-center justify-center space-x-4 space-y-4 w-64">
+                    <div className="flex items-center justify-center space-x-4 space-y-6 w-64">
                         <Match key={match.submatches[0].id} match={match.submatches[0]} setMatch={setMatch} bracketId={bracketId} />
                         <button
                             onClick={() => handleChange(match, 0)}

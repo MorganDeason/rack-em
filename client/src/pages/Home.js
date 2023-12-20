@@ -9,22 +9,18 @@ export default function Home() {
 
   useEffect(() => {
     getAllTeams()
-        .then(data => setTeams(data))
-}, [])
-
+      .then(data => setTeams(data))
+  }, [])
 
   return (
-    <div className='flex flex-nowrap h-screen '>
+    <div className='flex flex-nowrap'>
       <div className='w-1/3 max-h-full mr-4'>
-        <div>
-          <TeamList teams={teams} setTeams={setTeams}/>
-        </div>
+        <TeamList teams={teams} setTeams={setTeams} />
       </div>
       <div className='w-2/3 max-h-full'>
         <BracketList />
       </div>
     </div>
-
   );
 }
 
