@@ -13,11 +13,11 @@ export default function Home() {
   }, [])
 
   return (
-    <div className='flex flex-nowrap'>
-      <div className='w-1/3 max-h-full mr-4'>
+    <div className='flex flex-nowrap h-screen'>
+      <div className='w-1/3 mr-4'>
         <TeamList teams={teams} setTeams={setTeams} />
       </div>
-      <div className='w-2/3 max-h-full'>
+      <div className='w-2/3'>
         <BracketList />
       </div>
     </div>

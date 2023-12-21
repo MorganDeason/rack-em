@@ -14,7 +14,19 @@ export async function getTeamsByBracketId(bracketId) {
 }
 
 export async function deleteTeam(teamId) {
-    return await fetch(`${apiUrl}${teamsEndpoint}?team_id=${teamId}`, { method: 'DELETE' })
+    try {
+        const res = await fetch(`${apiUrl}${teamsEndpoint}?team_id=${teamId}`, { method: 'DELETE' })
+        const data = await res.json()
+        if (data.error){
+            console.error(data.error)
+        }else{
+            return data
+        }
+    }
+    catch(error) {
+        console.error(error)
+    }
+
 }
 
 export async function createNewTeam(newTeam) {

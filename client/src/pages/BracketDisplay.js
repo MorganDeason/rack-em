@@ -12,8 +12,9 @@ export default function BracketDisplay() {
     const [displayMode, setDisplayMode] = useState(false)
     const selectedTeams = new Set([])
     const [bracketTeams, setBracketTeams] = useState(() => getTeamsByBracketId(params.bracketId).then(data => setBracketTeams(data)))
-    const [bracket, setBracket] = useState({ matches: {} })
-
+    const [bracket, setBracket] = useState({name:"",  matches: {} })
+    const color = selectMode ? "bg-green-800 hover:bg-green-700" : "bg-gray-700 hover:bg-gray-800"
+    
     useEffect(() => {
         if (bracketTeams.length > 0) {
             setDisplayMode(true)
@@ -26,7 +27,6 @@ export default function BracketDisplay() {
         getBracketById(params.bracketId)
             .then(bracket => {
                 setBracket(bracket)
-                // setDisplayMode(true)
             })
     }, [])
 
@@ -41,8 +41,6 @@ export default function BracketDisplay() {
             }
         }
     }
-
-    const color = selectMode ? "bg-green-800 hover:bg-green-700" : "bg-gray-700 hover:bg-gray-800"
 
     const swapToCurrentTeamList = () => {
         teamAssociation([...selectedTeams.keys()], params.bracketId)
@@ -74,17 +72,16 @@ export default function BracketDisplay() {
     }
 
     const setTournamentBracket = (bracket) => {
-
         bracket.matches = JSON.parse(bracket.matches)
         setBracket(bracket)
     }
-
+    
     return (
-        <div className="flex flex-nowrap">
-            <div className='w-1/3 max-h-full mr-4'>
+        <div className="grid grid-cols-3 max-h-screen">
+            <div className='col-span-1 max-h-full mr-4'>
                 {handleFlip()}
             </div>
-            <div className="w-2/3 max-h-full">
+            <div className="col-span-2 h-screen ">
                 <Tournament bracket={bracket} setBracket={setTournamentBracket} />
             </div>
         </div>
