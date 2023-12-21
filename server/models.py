@@ -26,6 +26,7 @@ class Bracket(db.Model, SerializerMixin):
     __tablename__ = 'brackets'
 
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
     matches = db.Column(db.String, nullable=False)
 
     associator = db.relationship("TeamBracketAssociator", back_populates="bracket")
