@@ -1,24 +1,20 @@
 from app import app
 from models import db, Team, Bracket, TeamBracketAssociator
-from matches import Match, generate_bracket
+from matches import generate_bracket
 import json
 
-# players =["Tim","Dennis","Andrew B.","Jason","Sophie","Sean","Mario","Miguel","Snehal","Maria","Andrew S.","Josh","Kash", "Julie", "Tre", "Emilia"]
+# def create_teams(players):
+#     teams = []
+#     for player in players:
+#         teams.append(Team(
+#             name = player
+#         ))
+
+#     return teams
 
 
-def create_teams(players):
-    teams = []
-    for player in players:
-        teams.append(Team(
-            name = player
-        ))
-
-    return teams
-
-def create_bracket(players):
-    return Bracket(matches = json.dumps(generate_bracket(players)))
-
-
+# def create_bracket(players):
+#     return Bracket(matches = json.dumps(generate_bracket(players)))
 
 
 with app.app_context():

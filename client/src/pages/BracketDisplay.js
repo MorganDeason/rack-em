@@ -75,7 +75,7 @@ export default function BracketDisplay() {
         bracket.matches = JSON.parse(bracket.matches)
         setBracket(bracket)
     }
-    
+
     return (
         <div className="grid grid-cols-3 max-h-screen">
             <div className='col-span-1 max-h-full mr-4'>
@@ -85,6 +85,5 @@ export default function BracketDisplay() {
                 <Tournament bracket={bracket} setBracket={setTournamentBracket} />
             </div>
         </div>
-
     )
 }

@@ -46,8 +46,7 @@ export default function BracketList() {
         const style = "border-4 border-zinc-400 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-green-400 to-green-600 rounded-full flex text-center text-black justify-center w-3/4 h-8"
         if (deleteMode) {
             return <div className={style} key={bracket.id} onClick={bracketDelete(bracket.id)}>{bracket.name}</div>
-        }
-        else {
+        } else {
             return <Link className={style} key={bracket.id} to={`/bracket/${bracket.id}`}>{bracket.name}</Link>
         }
     }

@@ -128,22 +128,6 @@
   /* Add any other styles you need */
 }
 
-/* .hope {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: black;
-  border-radius: 50%;
-  height: 100px;
-  width: 100px;
-  margin: 0;
-  text-align: center;
-  background: radial-gradient(circle at 33px 33px, #800000, #000);
-  color: white;
-  font-size: 16px;
-  line-height: 100px;
-} */
-
 .stage {
   width: 300px;
   height: 300px;
