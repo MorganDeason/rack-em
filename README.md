@@ -25,4 +25,4 @@ Running  ```pipenv install``` along with ```npm install``` should get all of the
 
 ## Credits
 
-Big-Bite-Recipes is created by **Morgan Deason** and **Miguel Flores** (2023)
+Rack-em is created by **Morgan Deason**(2023)
