@@ -1,4 +1,4 @@
-# rack-em
+# Rack-em
 
 
 ## Summary
